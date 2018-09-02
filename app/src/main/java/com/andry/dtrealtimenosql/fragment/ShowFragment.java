@@ -8,9 +8,9 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.andry.dtrealtimenosql.R;
 import com.andry.dtrealtimenosql.model.Artist;
@@ -31,8 +31,9 @@ public class ShowFragment extends Fragment {
     private static final String ARTIST_NODE = "Artists";
     private DatabaseReference databaseReference;
     private ListView lstArtist;
-    private ArrayAdapter<String> arrayAdapter;
+    private ArrayAdapter arrayAdapter;
     private List<String> artistName;
+    private List<Artist> artists;
 
 
     public ShowFragment() {
@@ -45,7 +46,7 @@ public class ShowFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_show, container, false);
-        lstArtist = (ListView)view.findViewById(R.id.lstArtist);
+        lstArtist = view.findViewById(R.id.lstArtist);
 
         return view;
     }
@@ -54,21 +55,22 @@ public class ShowFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         artistName = new ArrayList<>();
-        arrayAdapter = new ArrayAdapter<String>(getActivity().getApplicationContext(), android.R.layout.simple_expandable_list_item_1, artistName);
+        artists = new ArrayList<>();
+        arrayAdapter = new ArrayAdapter <> (getActivity(), android.R.layout.simple_list_item_1, artistName);
         lstArtist.setAdapter(arrayAdapter);
 
-       // FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         databaseReference = FirebaseDatabase.getInstance().getReference();
         databaseReference.child(ARTIST_NODE).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 artistName.clear();
+                artists.clear();
                 if (dataSnapshot.exists()){
                    for (DataSnapshot snapshot: dataSnapshot.getChildren() ) {
                        Artist artist = snapshot.getValue(Artist.class);
                            artistName.add(artist.getName());
+                           artists.add(artist);
                     }
-
                 }
                 arrayAdapter.notifyDataSetChanged();
             }
@@ -76,6 +78,18 @@ public class ShowFragment extends Fragment {
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
+            }
+        });
+
+        lstArtist.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                String idArtist = artists.get(position).getId();
+                artists.remove(position);
+                artistName.remove(position);
+
+                databaseReference.child(ARTIST_NODE).child(idArtist).removeValue();
+                return true;
             }
         });
     }

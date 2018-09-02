@@ -24,7 +24,7 @@
                 android:id="@+id/dato1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Datos a subir"
+                android:hint="Nombre"
                 android:inputType="text" />
 
         </android.support.design.widget.TextInputLayout>
@@ -38,7 +38,7 @@
                 android:id="@+id/dato2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Datos a subir"
+                android:hint="Genero"
                 android:inputType="text" />
 
         </android.support.design.widget.TextInputLayout>

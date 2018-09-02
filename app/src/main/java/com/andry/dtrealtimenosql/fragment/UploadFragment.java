@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.andry.dtrealtimenosql.R;
 import com.andry.dtrealtimenosql.model.Artist;
@@ -37,9 +38,9 @@ public class UploadFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_upload, container, false);
-        dt1 = (TextInputEditText)v.findViewById(R.id.dato1);
-        dt2 = (TextInputEditText)v.findViewById(R.id.dato2);
-        button = (Button) v.findViewById(R.id.upload_data);
+        dt1 = v.findViewById(R.id.dato1);
+        dt2 = v.findViewById(R.id.dato2);
+        button =  v.findViewById(R.id.upload_data);
         return v;
     }
 
@@ -47,7 +48,7 @@ public class UploadFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+        FirebaseDatabase.getInstance();
         databaseReference = FirebaseDatabase.getInstance().getReference(); //practicarealtimestorage
 
         button.setOnClickListener(new View.OnClickListener() {
@@ -59,7 +60,7 @@ public class UploadFragment extends Fragment {
                 Artist artist = new Artist(databaseReference.push().getKey(),dt1_string,dt2_string);
                 databaseReference.child(ARTIST_NODE).child(artist.getId()).setValue(artist);
 
-                //Snackbar.make(this, "Datos subidos", Snackbar.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Subiendo", Toast.LENGTH_SHORT).show();
 
             }
         });
