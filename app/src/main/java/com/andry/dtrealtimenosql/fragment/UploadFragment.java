@@ -3,6 +3,7 @@ package com.andry.dtrealtimenosql.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -35,13 +36,11 @@ public class UploadFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_upload, container, true);
+        View v = inflater.inflate(R.layout.fragment_upload, container, false);
         dt1 = (TextInputEditText)v.findViewById(R.id.dato1);
         dt2 = (TextInputEditText)v.findViewById(R.id.dato2);
         button = (Button) v.findViewById(R.id.upload_data);
         return v;
-
-
     }
 
     @Override
@@ -60,12 +59,10 @@ public class UploadFragment extends Fragment {
                 Artist artist = new Artist(databaseReference.push().getKey(),dt1_string,dt2_string);
                 databaseReference.child(ARTIST_NODE).child(artist.getId()).setValue(artist);
 
+                //Snackbar.make(this, "Datos subidos", Snackbar.LENGTH_SHORT).show();
+
             }
         });
-
-    }
-
-    public void Upload(View vie){
 
     }
 

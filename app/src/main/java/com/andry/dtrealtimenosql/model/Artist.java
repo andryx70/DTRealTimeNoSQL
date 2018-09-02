@@ -4,6 +4,10 @@ package com.andry.dtrealtimenosql.model;
 public class Artist {
     private String id;
     private String name;
+
+    public Artist() {
+    }
+
     private String genere;
 
 
